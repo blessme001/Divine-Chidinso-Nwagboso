@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Divine Chidinso — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+:root{
+  --forest:#0D1F1A;
+  --forest-mid:#162D25;
+  --sage:#3D6B57;
+  --gold:#C9A84C;
+  --gold-light:#E2C97E;
+  --ivory:#F5EFE0;
+  --ivory-dim:#C8BFA8;
+}
+body{background:var(--forest);color:var(--ivory);font-family:'Inter',sans-serif;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--forest)}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:2px}
+
+/* CANVAS */
+#particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+#cursor-glow{position:fixed;pointer-events:none;z-index:1;width:350px;height:350px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,0.07) 0%,transparent 70%);transform:translate(-50%,-50%);transition:opacity .3s;top:0;left:0}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.2rem 2rem;display:flex;align-items:center;justify-content:space-between;transition:all .5s}
+nav.scrolled{backdrop-filter:blur(16px);background:rgba(13,31,26,.85);border-bottom:1px solid rgba(201,168,76,.1)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--gold);letter-spacing:.05em;cursor:pointer}
+.nav-links{display:flex;align-items:center;gap:2rem}
+.nav-links a{font-size:.8rem;color:var(--ivory-dim);text-decoration:none;position:relative;transition:color .3s}
+.nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:var(--gold);transition:width .4s}
+.nav-links a:hover{color:var(--ivory)}
+.nav-links a:hover::after{width:100%}
+.nav-cta{padding:.5rem 1.3rem;border:1px solid rgba(201,168,76,.5);color:var(--gold);font-size:.8rem;text-decoration:none;transition:all .3s;border-radius:2px}
+.nav-cta:hover{background:rgba(201,168,76,.1)}
+.hamburger{display:none;background:none;border:none;cursor:pointer;color:var(--ivory);padding:.3rem}
+.mobile-menu{display:none;position:fixed;top:65px;left:0;right:0;z-index:99;background:rgba(13,31,26,.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(201,168,76,.1);padding:1rem 2rem 1.5rem}
+.mobile-menu a{display:block;padding:.8rem 0;font-size:.9rem;color:var(--ivory-dim);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.05)}
+.mobile-menu a:hover{color:var(--gold)}
+.mobile-menu.open{display:block}
+
+/* SECTIONS */
+section{position:relative;z-index:2}
+
+/* HERO */
+#about{min-height:100vh;display:flex;align-items:center;padding:7rem 2rem 4rem}
+.hero-inner{max-width:1100px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.hero-eyebrow{display:flex;align-items:center;gap:.8rem;margin-bottom:1.5rem;opacity:0;transform:translateX(-20px);animation:slideIn .8s .3s forwards}
+.hero-line{width:2rem;height:1px;background:var(--gold)}
+.hero-label{font-size:.7rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase}
+.hero-name{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,6vw,4.5rem);font-weight:300;line-height:1.05;color:var(--ivory);margin-bottom:1.2rem}
+.hero-name span{display:inline-block;opacity:0;transform:translateY(20px)}
+.hero-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.4rem;color:rgba(201,168,76,.8);margin-bottom:1.2rem;opacity:0;animation:fadeUp .8s 1.2s forwards}
+.hero-bio{font-size:.9rem;color:var(--ivory-dim);line-height:1.8;max-width:440px;margin-bottom:2.5rem;opacity:0;animation:fadeUp .8s 1.5s forwards}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;animation:fadeUp .8s 1.8s forwards}
+.btn-primary{padding:.85rem 2rem;background:var(--gold);color:var(--forest);font-weight:600;font-size:.85rem;letter-spacing:.05em;text-decoration:none;transition:all .3s;display:inline-block}
+.btn-primary:hover{background:var(--gold-light);transform:scale(1.03)}
+.btn-secondary{padding:.85rem 2rem;border:1px solid rgba(255,255,255,.2);color:var(--ivory-dim);font-size:.85rem;text-decoration:none;transition:all .3s;display:inline-block}
+.btn-secondary:hover{border-color:rgba(201,168,76,.5);color:var(--ivory);transform:scale(1.03)}
+.hero-stats{display:flex;gap:2.5rem;margin-top:3rem;padding-top:2.5rem;border-top:1px solid rgba(255,255,255,.1);opacity:0;animation:fadeUp .8s 2.1s forwards}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:2rem;background:linear-gradient(135deg,#C9A84C,#E2C97E,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-label{font-size:.7rem;color:var(--ivory-dim);margin-top:.2rem;letter-spacing:.05em}
+
+/* PHOTO */
+.photo-wrap{display:flex;justify-content:flex-end;opacity:0;transform:scale(.94) translateX(20px);animation:photoIn 1s .8s forwards}
+.photo-frame{position:relative;width:300px;height:400px}
+.photo-frame img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.photo-placeholder{width:100%;height:100%;background:var(--forest-mid);border:1px solid rgba(201,168,76,.2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem}
+.photo-placeholder svg{opacity:.3}
+.photo-placeholder p{font-size:.75rem;color:rgba(200,191,168,.4);text-align:center;line-height:1.6}
+.corner{position:absolute;width:1.5rem;height:1.5rem;border-color:rgba(201,168,76,.6)}
+.corner.tl{top:0;left:0;border-top:1px solid;border-left:1px solid}
+.corner.tr{top:0;right:0;border-top:1px solid;border-right:1px solid}
+.corner.bl{bottom:0;left:0;border-bottom:1px solid;border-left:1px solid}
+.corner.br{bottom:0;right:0;border-bottom:1px solid;border-right:1px solid}
+.photo-badge{position:absolute;bottom:-1.2rem;left:-1.2rem;background:var(--forest-mid);border:1px solid rgba(201,168,76,.3);padding:.7rem 1rem;font-size:.7rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase}
+
+/* SECTIONS COMMON */
+.section-inner{max-width:1100px;margin:0 auto;width:100%}
+.section-label{display:flex;align-items:center;gap:1rem;margin-bottom:.8rem}
+.section-divider{width:3.5rem;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.section-eyebrow{font-size:.7rem;letter-spacing:.25em;color:var(--gold);text-transform:uppercase}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3rem);font-weight:300;color:var(--ivory);margin-bottom:1rem}
+.section-title em{font-style:italic;background:linear-gradient(135deg,#C9A84C,#E2C97E,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.section-sub{font-size:.85rem;color:var(--ivory-dim);line-height:1.8;max-width:440px;margin-bottom:3.5rem}
+
+/* SKILLS */
+#skills{padding:7rem 2rem}
+.skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.skill-card{background:rgba(22,45,37,.6);border:1px solid rgba(255,255,255,.06);padding:2rem;border-radius:2px;transition:all .4s cubic-bezier(.25,.46,.45,.94)}
+.skill-card:hover{box-shadow:0 0 40px rgba(201,168,76,.1),0 20px 60px rgba(0,0,0,.4);transform:translateY(-4px)}
+.skill-cat{display:flex;align-items:center;gap:.6rem;margin-bottom:1.3rem}
+.skill-dot{width:.45rem;height:.45rem;border-radius:50%;background:var(--gold)}
+.skill-cat-label{font-size:.7rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
+.pills{display:flex;flex-wrap:wrap;gap:.5rem}
+.pill{font-size:.75rem;padding:.35rem .85rem;border:1px solid rgba(255,255,255,.1);color:var(--ivory-dim);border-radius:2px;cursor:default;transition:all .3s}
+.pill:hover{background:rgba(201,168,76,.12);border-color:var(--gold);color:var(--gold-light);transform:scale(1.04)}
+
+/* EXPERIENCE / VOLUNTEERING */
+#experience,#volunteering{padding:7rem 2rem}
+#experience{background:rgba(22,45,37,.15)}
+.cards{display:flex;flex-direction:column;gap:1.2rem}
+.exp-card{background:rgba(22,45,37,.5);border:1px solid rgba(255,255,255,.06);border-radius:2px;overflow:hidden;cursor:pointer;transition:all .4s}
+.exp-card:hover{box-shadow:0 0 40px rgba(201,168,76,.08),0 20px 50px rgba(0,0,0,.3);transform:translateY(-2px)}
+.exp-header{padding:2rem;display:flex;justify-content:space-between;align-items:flex-start;gap:1rem}
+.exp-period{font-size:.7rem;color:var(--gold);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.6rem}
+.exp-role{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--ivory)}
+.exp-org{font-size:.82rem;color:var(--sage);margin-top:.3rem}
+.exp-preview{font-size:.82rem;color:rgba(200,191,168,.65);line-height:1.7;margin-top:.8rem}
+.exp-toggle{flex-shrink:0;width:1.5rem;height:1.5rem;color:rgba(201,168,76,.5);transition:transform .3s}
+.exp-toggle.open{transform:rotate(45deg)}
+.exp-body{display:none;border-top:1px solid rgba(255,255,255,.05);padding:0 2rem 2rem}
+.exp-body.open{display:block}
+.exp-body ul{list-style:none;padding-top:1.5rem;display:flex;flex-direction:column;gap:.8rem}
+.exp-body li{display:flex;gap:.8rem;font-size:.82rem;color:var(--ivory-dim);line-height:1.7}
+.exp-body li::before{content:'▸';color:var(--gold);flex-shrink:0;margin-top:.05rem}
+
+/* EDUCATION */
+#education{padding:5rem 2rem;background:rgba(22,45,37,.15)}
+.edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:3rem}
+.edu-card{background:rgba(22,45,37,.6);border:1px solid rgba(255,255,255,.06);padding:2rem;border-radius:2px;transition:all .4s}
+.edu-card:hover{transform:translateY(-4px);box-shadow:0 0 30px rgba(201,168,76,.08)}
+.edu-year{font-size:.7rem;color:var(--gold);letter-spacing:.2em;text-transform:uppercase;margin-bottom:1rem}
+.edu-deg{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--ivory);margin-bottom:.4rem}
+.edu-school{font-size:.82rem;color:var(--sage)}
+.edu-loc{font-size:.75rem;color:rgba(200,191,168,.4);margin-top:.2rem}
+
+/* CONTACT */
+#contact{padding:8rem 2rem;text-align:center}
+.contact-inner{max-width:700px;margin:0 auto}
+.contact-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:300;color:var(--ivory);line-height:1.1;margin-bottom:1.2rem}
+.contact-sub{font-size:.85rem;color:var(--ivory-dim);line-height:1.8;max-width:380px;margin:0 auto 3rem}
+.contact-btns{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-bottom:4rem}
+.contact-email{display:flex;align-items:center;gap:.7rem;padding:1rem 2rem;background:var(--gold);color:var(--forest);font-weight:600;font-size:.82rem;text-decoration:none;transition:all .3s}
+.contact-email:hover{background:var(--gold-light);transform:scale(1.03)}
+.contact-phone{display:flex;align-items:center;gap:.7rem;padding:1rem 2rem;border:1px solid rgba(255,255,255,.15);color:var(--ivory-dim);font-size:.82rem;text-decoration:none;transition:all .3s}
+.contact-phone:hover{border-color:rgba(201,168,76,.5);color:var(--ivory);transform:scale(1.03)}
+.contact-footer{border-top:1px solid rgba(255,255,255,.1);padding-top:2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.contact-footer span{font-size:.75rem;color:rgba(200,191,168,.25)}
+.contact-footer em{font-family:'Cormorant Garamond',serif;font-style:italic;color:rgba(200,191,168,.25);font-size:.9rem}
+
+/* FOOTER */
+footer{padding:1.5rem 2rem;border-top:1px solid rgba(255,255,255,.05);text-align:center;position:relative;z-index:2}
+footer p{font-size:.75rem;color:rgba(200,191,168,.25);letter-spacing:.05em}
+
+/* BACK TO TOP */
+#back-top{position:fixed;bottom:2rem;right:2rem;z-index:50;width:2.5rem;height:2.5rem;border:1px solid rgba(201,168,76,.3);background:rgba(13,31,26,.8);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;color:var(--gold);cursor:pointer;transition:all .3s;opacity:0;pointer-events:none}
+#back-top.visible{opacity:1;pointer-events:all}
+#back-top:hover{border-color:rgba(201,168,76,.7);transform:scale(1.1)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .7s cubic-bezier(.25,.46,.45,.94),transform .7s cubic-bezier(.25,.46,.45,.94)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ANIMATIONS */
+@keyframes slideIn{to{opacity:1;transform:translateX(0)}}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+@keyframes photoIn{to{opacity:1;transform:scale(1) translateX(0)}}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hamburger{display:block}
+  .hero-inner{grid-template-columns:1fr;gap:3rem}
+  .photo-wrap{justify-content:center;order:-1}
+  .photo-frame{width:230px;height:300px}
+  .skills-grid{grid-template-columns:1fr}
+  .edu-grid{grid-template-columns:1fr}
+  .contact-footer{flex-direction:column;text-align:center}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+<div id="cursor-glow"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo" onclick="scrollTo('about')">Divine<span style="color:var(--ivory-dim)">.</span></div>
+  <div class="nav-links">
+    <a href="#about" onclick="nav(event,'about')">About</a>
+    <a href="#skills" onclick="nav(event,'skills')">Skills</a>
+    <a href="#experience" onclick="nav(event,'experience')">Experience</a>
+    <a href="#volunteering" onclick="nav(event,'volunteering')">Volunteering</a>
+    <a href="#contact" onclick="nav(event,'contact')">Contact</a>
+    <a href="mailto:nwagbosodivine2000@gmail.com" class="nav-cta">Hire Me</a>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <svg id="ham-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <line x1="3" y1="8" x2="21" y2="8"/><line x1="3" y1="16" x2="21" y2="16"/>
+    </svg>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#about" onclick="mobileNav('about')">About</a>
+  <a href="#skills" onclick="mobileNav('skills')">Skills</a>
+  <a href="#experience" onclick="mobileNav('experience')">Experience</a>
+  <a href="#volunteering" onclick="mobileNav('volunteering')">Volunteering</a>
+  <a href="#contact" onclick="mobileNav('contact')">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="about">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">
+        <div class="hero-line"></div>
+        <span class="hero-label">Portfolio</span>
+      </div>
+      <h1 class="hero-name" id="hero-name"></h1>
+      <p class="hero-tagline">Operations. Leadership. Impact.</p>
+      <p class="hero-bio">A dynamic professional with a B.Sc. in Agriculture and a proven record in operations, community development, and administrative leadership — driven by excellence and continuous growth.</p>
+      <div class="hero-btns">
+        <a href="mailto:nwagbosodivine2000@gmail.com" class="btn-primary">Get In Touch</a>
+        <a href="#experience" onclick="nav(event,'experience')" class="btn-secondary">View Work</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-val">5,000+</div>
+          <div class="stat-label">Lives Impacted</div>
+        </div>
+        <div>
+          <div class="stat-val">30%</div>
+          <div class="stat-label">Funding Growth</div>
+        </div>
+        <div>
+          <div class="stat-val">200+</div>
+          <div class="stat-label">Students Reached</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="photo-wrap">
+      <div class="photo-frame">
+        <img src="./assets/divine.jpg" alt="Divine Chidinso" onerror="this.style.display='none';document.getElementById('photo-fallback').style.display='flex'"/>
+        <div id="photo-fallback" class="photo-placeholder" style="display:none">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1">
+            <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+          </svg>
+          <p>Add photo as<br/>assets/divine.jpg</p>
+        </div>
+        <div class="corner tl"></div>
+        <div class="corner tr"></div>
+        <div class="corner bl"></div>
+        <div class="corner br"></div>
+        <div class="photo-badge">📍 Lekki, Lagos</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label"><div class="section-divider"></div><span class="section-eyebrow">Expertise</span></div>
+      <h2 class="section-title">Skills & <em>Capabilities</em></h2>
+      <p class="section-sub">A versatile toolkit spanning operations, communication, and strategic leadership.</p>
+    </div>
+    <div class="skills-grid reveal">
+      <div class="skill-card">
+        <div class="skill-cat"><div class="skill-dot"></div><span class="skill-cat-label">Productivity & Office</span></div>
+        <div class="pills">
+          <span class="pill">Microsoft Office Suite</span><span class="pill">Google Workspace</span><span class="pill">Zoom</span><span class="pill">Microsoft Teams</span><span class="pill">Slack</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-cat"><div class="skill-dot"></div><span class="skill-cat-label">Operations & Admin</span></div>
+        <div class="pills">
+          <span class="pill">Administrative Support</span><span class="pill">Data Entry</span><span class="pill">Report Writing</span><span class="pill">Documentation</span><span class="pill">Sales & Billing</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-cat"><div class="skill-dot"></div><span class="skill-cat-label">Business & Strategy</span></div>
+        <div class="pills">
+          <span class="pill">CRM</span><span class="pill">Logistics & Supply Chain</span><span class="pill">Stakeholder Engagement</span><span class="pill">Sponsorship & Partnership</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-cat"><div class="skill-dot"></div><span class="skill-cat-label">Soft Skills</span></div>
+        <div class="pills">
+          <span class="pill">Task Prioritization</span><span class="pill">Customer Service</span><span class="pill">Research</span><span class="pill">Attention to Detail</span><span class="pill">Adaptability</span><span class="pill">Leadership</span><span class="pill">Critical Thinking</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label"><div class="section-divider"></div><span class="section-eyebrow">Career</span></div>
+      <h2 class="section-title">Work <em>Experience</em></h2>
+      <p class="section-sub">Hands-on experience in sales, operations, and team leadership across diverse industries.</p>
+    </div>
+    <div class="cards reveal">
+      <div class="exp-card" onclick="toggleCard(this)">
+        <div class="exp-header">
+          <div>
+            <div class="exp-period">2022 – 2023</div>
+            <div class="exp-role">Network Marketing Distributor</div>
+            <div class="exp-org">Neolife International · Jos, Plateau State</div>
+            <div class="exp-preview">Promoted and distributed health and wellness products, consistently achieving monthly sales targets.</div>
+          </div>
+          <svg class="exp-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+        <div class="exp-body">
+          <ul>
+            <li>Built and mentored a team of independent distributors, boosting overall team performance.</li>
+            <li>Delivered exceptional client education and relationship management, growing the customer base steadily.</li>
+            <li>Executed sales strategies that increased brand awareness across the region.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="exp-card" onclick="toggleCard(this)">
+        <div class="exp-header">
+          <div>
+            <div class="exp-period">2022</div>
+            <div class="exp-role">Intern</div>
+            <div class="exp-org">University Farm Practice Training · Ilorin, Kwara State</div>
+            <div class="exp-preview">Supported coordination of farm produce sales and maintained accurate transaction records.</div>
+          </div>
+          <svg class="exp-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+        <div class="exp-body">
+          <ul>
+            <li>Collaborated with operations teams on daily agricultural tasks including planting and harvesting.</li>
+            <li>Maintained detailed activity logs and communicated progress to supervisors for continuous improvement.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VOLUNTEERING -->
+<section id="volunteering">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label"><div class="section-divider"></div><span class="section-eyebrow">Service</span></div>
+      <h2 class="section-title">Volunteering & <em>Impact</em></h2>
+      <p class="section-sub">Committed to community growth through leadership, empowerment, and purposeful action.</p>
+    </div>
+    <div class="cards reveal">
+      <div class="exp-card" onclick="toggleCard(this)">
+        <div class="exp-header">
+          <div>
+            <div class="exp-period">2019 – Present</div>
+            <div class="exp-role">Personal Assistant to Founder & General Volunteer</div>
+            <div class="exp-org">Naza Agape Foundation · Jos, Plateau State</div>
+            <div class="exp-preview">Provided day-to-day administrative and logistical support to the founder for efficient coordination.</div>
+          </div>
+          <svg class="exp-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+        <div class="exp-body">
+          <ul>
+            <li>Helped organize community outreach events benefiting over 5,000 individuals.</li>
+            <li>Led sponsorship initiatives contributing to a 30% increase in external funding for foundation projects.</li>
+            <li>Managed social media accounts, increasing online visibility and campaign reach.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="exp-card" onclick="toggleCard(this)">
+        <div class="exp-header">
+          <div>
+            <div class="exp-period">2022 – 2024</div>
+            <div class="exp-role">Project Manager</div>
+            <div class="exp-org">Christ Embassy — University of Ilorin Chapter</div>
+            <div class="exp-preview">Spearheaded planning and execution of university-wide outreach events impacting 200+ students.</div>
+          </div>
+          <svg class="exp-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+        <div class="exp-body">
+          <ul>
+            <li>Coordinated volunteer teams for seamless delivery of logistics, publicity, and engagement.</li>
+            <li>Facilitated mentorship and counseling sessions for emotional, academic, and spiritual wellbeing.</li>
+            <li>Drafted post-event reports and strategic documentation for church leadership.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label"><div class="section-divider"></div><span class="section-eyebrow">Academic</span></div>
+      <h2 class="section-title">Education</h2>
+    </div>
+    <div class="edu-grid reveal">
+      <div class="edu-card">
+        <div class="edu-year">2019 – 2024</div>
+        <div class="edu-deg">B.Sc. Agriculture</div>
+        <div class="edu-school">University of Ilorin</div>
+        <div class="edu-loc">Ilorin, Kwara State</div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-year">2012 – 2018</div>
+        <div class="edu-deg">Senior Secondary Certificate</div>
+        <div class="edu-school">Baptist High School</div>
+        <div class="edu-loc">Jos, Plateau State</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner reveal">
+    <div class="section-label" style="justify-content:center"><div class="section-divider"></div><span class="section-eyebrow">Connect</span><div class="section-divider"></div></div>
+    <h2 class="contact-title">Let's Work<br/><em style="font-family:'Cormorant Garamond',serif;font-style:italic;background:linear-gradient(135deg,#C9A84C,#E2C97E,#C9A84C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Together</em></h2>
+    <p class="contact-sub">Open to operations, administrative, and project coordination roles. Reach out and let's create something meaningful.</p>
+    <div class="contact-btns">
+      <a href="mailto:nwagbosodivine2000@gmail.com" class="contact-email">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,6 12,13 2,6"/></svg>
+        nwagbosodivine2000@gmail.com
+      </a>
+      <a href="tel:+2348061797417" class="contact-phone">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.3h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        +234 806 179 7417
+      </a>
+    </div>
+    <div class="contact-footer">
+      <span>Lekki, Lagos State, Nigeria</span>
+      <em>Built with purpose.</em>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© <span id="yr"></span> Nwagboso Divine Chidinso · All rights reserved</p>
+</footer>
+
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<script>
+// Year
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+// Nav smooth scroll
+function nav(e, id){ e.preventDefault(); document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); }
+function scrollTo(id){ document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); }
+
+// Mobile menu
+let menuOpen = false;
+function toggleMenu(){
+  menuOpen = !menuOpen;
+  document.getElementById('mobile-menu').classList.toggle('open', menuOpen);
+  const icon = document.getElementById('ham-icon');
+  icon.innerHTML = menuOpen
+    ? '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>'
+    : '<line x1="3" y1="8" x2="21" y2="8"/><line x1="3" y1="16" x2="21" y2="16"/>';
+}
+function mobileNav(id){
+  toggleMenu();
+  document.getElementById(id)?.scrollIntoView({behavior:'smooth'});
+}
+
+// Nav scroll style
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+  document.getElementById('back-top').classList.toggle('visible', window.scrollY > 400);
+});
+
+// Reveal on scroll
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if(entry.isIntersecting){
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '-60px' });
+reveals.forEach(el => observer.observe(el));
+
+// Expand cards
+function toggleCard(card){
+  const body = card.querySelector('.exp-body');
+  const toggle = card.querySelector('.exp-toggle');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  toggle.classList.toggle('open', !isOpen);
+}
+
+// Hero name typewriter
+const name = "Nwagboso Divine Chidinso";
+const container = document.getElementById('hero-name');
+name.split('').forEach((ch, i) => {
+  const span = document.createElement('span');
+  span.textContent = ch === ' ' ? '\u00A0' : ch;
+  span.style.cssText = `transition: opacity .4s ${i*55}ms, transform .4s ${i*55}ms`;
+  container.appendChild(span);
+});
+setTimeout(() => {
+  container.querySelectorAll('span').forEach(s => {
+    s.style.opacity = '1';
+    s.style.transform = 'translateY(0)';
+  });
+}, 100);
+
+// Particle system
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+function resize(){ canvas.width = innerWidth; canvas.height = innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+
+const particles = Array.from({length:55}, () => {
+  const p = { x:0, y:0, size:0, sx:0, sy:0, op:0, life:0, maxLife:0 };
+  reset(p); p.life = Math.random() * p.maxLife; return p;
+});
+
+function reset(p){
+  p.x = Math.random() * canvas.width;
+  p.y = Math.random() * canvas.height;
+  p.size = Math.random() * 1.4 + 0.3;
+  p.sy = -(Math.random() * 0.35 + 0.1);
+  p.sx = (Math.random() - 0.5) * 0.15;
+  p.op = Math.random() * 0.45 + 0.1;
+  p.life = 0;
+  p.maxLife = Math.random() * 200 + 100;
+  p.gold = Math.random() > 0.65;
+}
+
+function tick(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p => {
+    p.x += p.sx; p.y += p.sy; p.life++;
+    if(p.life >= p.maxLife) reset(p);
+    const prog = p.life / p.maxLife;
+    const fade = prog < .2 ? prog/.2 : prog > .8 ? (1-prog)/.2 : 1;
+    ctx.globalAlpha = p.op * fade;
+    ctx.fillStyle = p.gold ? '#C9A84C' : '#3D6B57';
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(tick);
+}
+tick();
+
+// Cursor glow
+const glow = document.getElementById('cursor-glow');
+document.addEventListener('mousemove', e => {
+  glow.style.left = e.clientX + 'px';
+  glow.style.top  = e.clientY + 'px';
+});
+</script>
+</body>
+</html>
